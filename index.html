@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editor PortArt</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  .logo{
+    display: flex;
+  align-items: center;
+  margin-left: -50px;        
+  }
+  .area{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+  }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- Barra superior -->
+    <header>
+      <span>
+        <div class="logo">
+        <img src="portart.png" alt="Logo PortArt"
+        height="100"
+        width="200" />
+        </span> </div>
+        
+      </span>
+      <button id="btn-download">Baixar imagem</button>
+    </header>
+
+    <!-- Área central -->
+    <main>
+      
+      <!-- Upload (aparece antes de escolher foto) -->
+      <div id="upload-area">
+        <p class="area">Clique ou arraste uma foto aqui</p>
+        <input type="file" id="input-file" accept="image/*" />
+      </div>
+      
+      <!-- Canvas onde a imagem aparece -->
+      <canvas id="canvas" style="display:none"></canvas>
+      
+    </main>
+
+    <!-- Painel lateral de ajustes -->
+    <aside id="painel">
+      
+      
+      <h3>Ajustes</h3>
+      <label>Brilho <span id="val-brightness">100</span>%</label>
+      <input type="range" id="brightness" min="0" max="200" value="100" />
+
+      <label>Contraste <span id="val-contrast">100</span>%</label>
+      <input type="range" id="contrast" min="0" max="200" value="100" />
+
+      <label>Saturação <span id="val-saturate">100</span>%</label>
+      <input type="range" id="saturate" min="0" max="200" value="100" />
+
+      <label>Nitidez <span id="val-sharpness">0</span>%</label>
+      <input type="range" id="sharpness" min="0" max="100" step="0.1" value="0" />
+
+      <label>Sépia <span id="val-sepia">0</span>%</label>
+      <input type="range" id="sepia" min="0" max="100" value="0" />
+
+      <label>Escala de cinza <span id="val-grayscale">0</span>%</label>
+      <input type="range" id="grayscale" min="0" max="100" value="0" />
+
+      <button id="btn-reset">Resetar ajustes</button>
+    </aside>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
