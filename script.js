@@ -33,10 +33,27 @@ function salvarEstado() {
 const camada    = document.createElement('canvas');
 const ctxCamada = camada.getContext('2d');
 
-// --- Carrega a imagem escolhida via botão clássico ---
+// --- Carrega a imagem escolhida via botão clássico com VALIDAÇÃO ---
 inputFile.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
+
+  // Limite de tamanho: 10MB (10 * 1024 * 1024 bytes)
+  const limiteTamanho = 10 * 1024 * 1024; 
+
+  // Validação de Tipo
+  if (!file.type.startsWith('image/')) {
+    alert('Por favor, selecione apenas arquivos de imagem válidos (PNG, JPG, WEBP, etc).');
+    inputFile.value = ''; // Limpa o input
+    return;
+  }
+
+  // Validação de Tamanho
+  if (file.size > limiteTamanho) {
+    alert('A imagem é muito grande! Escolha um arquivo de até 10 MB para evitar travamentos.');
+    inputFile.value = ''; // Limpa o input
+    return;
+  }
 
   const url = URL.createObjectURL(file);
   historicoUndo = [];
@@ -80,17 +97,25 @@ uploadArea.addEventListener('drop', (e) => {
   e.stopPropagation();
   uploadArea.classList.remove('dragover');
 
-  // Tentativa A: É um arquivo arrastado do computador local?
+  // Tentativa A: É um arquivo arrastado do computador local? (COM VALIDAÇÃO)
   const arquivos = e.dataTransfer.files;
   if (arquivos && arquivos.length > 0) {
     const arquivo = arquivos[0];
-    if (arquivo.type.startsWith('image/')) {
-      historicoUndo = [];
-      historicoRedo = [];
-      img.src = URL.createObjectURL(arquivo);
-    } else {
-      alert('Por favor, solte apenas arquivos de imagem!');
+    const limiteTamanho = 10 * 1024 * 1024; // 10MB
+
+    if (!arquivo.type.startsWith('image/')) {
+      alert('Por favor, solte apenas arquivos de imagem válidos!');
+      return; 
     }
+
+    if (arquivo.size > limiteTamanho) {
+      alert('Esta imagem passa do limite de 10 MB. Tente um arquivo mais leve!');
+      return;
+    }
+
+    historicoUndo = [];
+    historicoRedo = [];
+    img.src = URL.createObjectURL(arquivo);
     return; 
   }
 
