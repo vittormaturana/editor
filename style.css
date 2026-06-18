@@ -114,3 +114,70 @@ aside input[type="range"] {
 
 #btn-reset:hover { background: #555; }
 
+/* --- Abas do painel --- */
+#abas {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.aba {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  color: #888;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 13px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.aba.ativa {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+}
+
+/* --- Botões de ferramenta --- */
+.btn-tool {
+  flex: 1;
+  padding: 8px 4px;
+  background: #444;
+  color: #fff;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-tool.ativo {
+  border-color: #fff;
+}
+
+#btn-limpar-desenho {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#btn-limpar-desenho:hover { background: #555; }
+
+/* Cursor no canvas conforme ferramenta */
+#canvas.modo-desenho  { cursor: crosshair; }
+#canvas.modo-borracha { cursor: cell; }
+#canvas.modo-crop { cursor: crop; }
+
+/* Efeito visual quando o arquivo estiver sendo arrastado sobre a área */
+#upload-area.dragover {
+  border-color: #fff;
+  background: #252525;
+  color: #fff;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
