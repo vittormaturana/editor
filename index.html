@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <title>Editor PortArt</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-  .logo{
-    display: flex;
-  align-items: center;
-  margin-left: -50px;        
-  }
-  .area{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-  }
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-left: -30px;
+    }
+
+    .area {
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    }
   </style>
 </head>
+
 <body>
 
   <div id="app">
@@ -23,173 +26,209 @@
     <header>
       <span>
         <div class="logo">
-        <img src="portart.png" alt="Logo PortArt"
-        height="100"
-        width="200" />
-        </span> </div>
-        
+          <img src="portart.png" alt="Logo PortArt" height="49.75" width="190" />
       </span>
-      <div style="display: flex; gap: 10px; margin-right: 20px;">
-        <button id="btn-undo" class="btn-tool" style="padding: 6px 12px; background: #444;" title="Desfazer (Ctrl+Z)">
-          <img src="imagens/desfazer.png" alt="desfazer"
-          height="20"
-          width="20" />
-        </button>
-        <button id="btn-redo" class="btn-tool" style="padding: 6px 12px; background: #444;" title="Refazer (Ctrl+Y)">
-          <img src="imagens/refazer.png" alt="refazer"
-          height="20"
-          width="20" /></button>
-      </div>
-      <button id="btn-download">Baixar imagem</button>
-    </header>
+  </div>
 
-    <!-- Área central -->
-    <main>
-      
-      <!-- Upload (aparece antes de escolher foto) -->
-      <div id="upload-area">
-        <p class="area">Clique ou arraste uma foto aqui</p>
-        <input type="file" id="input-file" accept="image/*" />
-      </div>
-      
-      <!-- Canvas onde a imagem aparece -->
-      <canvas id="canvas" style="display:none"></canvas>
-      
-    </main>
+  </span>
+  <div style="display: flex; gap: 10px; margin-right: 20px;">
+    <button id="btn-undo" class="btn-tool" style="padding: 6px 12px; background: #444;" title="Desfazer (Ctrl+Z)">
+      <img src="imagens/desfazer.png" alt="desfazer" height="20" width="20" />
+    </button>
+    <button id="btn-redo" class="btn-tool" style="padding: 6px 12px; background: #444;" title="Refazer (Ctrl+Y)">
+      <img src="imagens/refazer.png" alt="refazer" height="20" width="20" /></button>
+    
+  </div>
+  <button id="btn-download">Baixar imagem</button>
+  </header>
 
-    <!-- Painel lateral de ajustes -->
-    <aside id="painel">
+  <!-- Área central -->
+  <main>
 
-      <div id="abas">
-        <button class="aba ativa" data-aba="ajustes">Ajustes</button>
-        <button class="aba" data-aba="desenho">Desenho</button>
-        <button class="aba" data-aba="redimensionar">Redimensionar</button>
-      </div>
-    
-      <div id="painel-ajustes">
-        <label>Brilho <span id="val-brightness">100</span>%</label>
-        <input type="range" id="brightness" min="0" max="200" value="100" />
-    
-        <label>Contraste <span id="val-contrast">100</span>%</label>
-        <input type="range" id="contrast" min="0" max="200" value="100" />
-    
-        <label>Saturação <p id="val-saturate">100</p>%</label>
-        <input type="range" id="saturate" min="0" max="200" value="100" />
-    
-        <label>Nitidez <span id="val-sharpness">0</span>%</label>
-        <input type="range" id="sharpness" min="0" max="100" step="0.1" value="0" />
-    
-        <label>Sépia <span id="val-sepia">0</span>%</label>
-        <input type="range" id="sepia" min="0" max="100" value="0" />
-    
-        <label>Escala de cinza <span id="val-grayscale">0</span>%</label>
-        <input type="range" id="grayscale" min="0" max="100" value="0" />
-  
-        <button id="btn-reset">Resetar ajustes</button>
-        
-      </div>
-    
-      <div id="painel-desenho" style="display:none">
-        <label>Ferramenta</label>
-        <div style="display:flex; gap:8px; margin-bottom:4px;">
-          <button id="btn-pincel" class="btn-tool ativo">✏️ Pincel</button>
-          <button id="btn-borracha" class="btn-tool">🧹 Borracha</button>
-        </div>
-    
-        <label>Cor</label>
-        <input type="color" id="cor-pincel" value="#ff0000"
-          style="width:100%; height:36px; border:none; border-radius:8px; cursor:pointer; background:none;" />
-    
-        <label>Espessura <span id="val-espessura">6</span>px</label>
-        <input type="range" id="espessura" min="1" max="60" value="6" />
-    
-        <label>Opacidade <span id="val-opacidade">100</span>%</label>
-        <input type="range" id="opacidade" min="1" max="100" value="100" />
-    
-        <button id="btn-limpar-desenho">🗑️ Limpar desenho</button>
-      </div>
-    
-      <div id="painel-redimensionar" style="display:none">
-  
-        <h3>📐 Redimensionar Tela</h3>
-        <div style="display: flex; gap: 8px;">
-          <div>
-            <label style="margin: 0 0 4px;">Largura (px)</label>
-            <input type="number" id="resize-w" style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
-          </div>
-          <div>
-            <label style="margin: 0 0 4px;">Altura (px)</label>
-            <input type="number" id="resize-h" style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
-          </div>
-        </div>
-        <button id="btn-aplicar-resize" class="btn-tool" style="width:100%; margin-top:10px; padding:10px;">Aplicar Novo Tamanho</button>
-      
-        <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;" />
-      
-        <h3>✂️ Recortar Área (Crop)</h3>
-        
-        <div style="display:flex; gap:8px; margin-bottom:12px;">
-          <button id="btn-modo-crop" class="btn-tool">🔍 Selecionar Área</button>
-          <button id="btn-confirmar-crop" class="btn-tool" style="background:#e74c3c; display:none;">✔️ Cortar</button>
-        </div>
-      
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-          <div>
-            <label style="margin: 0 0 4px;">Início X</label>
-            <input type="number" id="crop-x" value="0" style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
-          </div>
-          <div>
-            <label style="margin: 0 0 4px;">Início Y</label>
-            <input type="number" id="crop-y" value="0" style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
-          </div>
-          <div>
-            <label style="margin: 0 0 4px;">Largura</label>
-            <input type="number" id="crop-w" style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
-          </div>
-          <div>
-            <label style="margin: 0 0 4px;">Altura</label>
-            <input type="number" id="crop-h" style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
-          </div>
-        </div>
-        <button id="btn-aplicar-crop" class="btn-tool" style="width:100%; margin-top:10px; padding:10px; background: #555;">Cortar via Campos</button>
-        <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;" />
+    <!-- Upload (aparece antes de escolher foto) -->
+    <div id="upload-area">
+      <p class="area">Clique ou arraste uma foto aqui</p>
+      <input type="file" id="input-file" accept="image/*" />
+    </div>
 
-              <h3>🔄 Girar e Espelhar</h3>
-                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                   <button id="btn-gira-90" class="btn-tool">↩️ Girar 90°</button>
-                   <button id="btn-flip-h" class="btn-tool">↔️ Espelhar H</button>
-                   <button id="btn-flip-v" class="btn-tool">↕️ Espelhar V</button>
+    <!-- Canvas onde a imagem aparece -->
+    <canvas id="canvas" style="display:none"></canvas>
+
+  </main>
+
+  <!-- Painel lateral de ajustes -->
+  <aside id="painel">
+
+    
+    <div id="abas">
+      <button class="aba ativa" data-aba="ajustes">Ajustes</button>
+      <button class="aba" data-aba="desenho">Desenho</button>
+      <button class="aba" data-aba="redimensionar">Redimensionar</button>
+    </div>
+
+    <div id="painel-ajustes">
+      <label>Brilho <span id="val-brightness">100</span>%</label>
+      <input type="range" id="brightness" min="0" max="200" value="100" />
+
+      <label>Contraste <span id="val-contrast">100</span>%</label>
+      <input type="range" id="contrast" min="0" max="200" value="100" />
+
+      <label>Saturação <p id="val-saturate">100</p>%</label>
+      <input type="range" id="saturate" min="0" max="200" value="100" />
+
+      <label>Nitidez <span id="val-sharpness">0</span>%</label>
+      <input type="range" id="sharpness" min="0" max="100" step="0.1" value="0" />
+
+      <label>Sépia <span id="val-sepia">0</span>%</label>
+      <input type="range" id="sepia" min="0" max="100" value="0" />
+
+      <label>Escala de cinza<span id="val-grayscale">0</span>%</label>
+      <input type="range" id="grayscale" min="0" max="100" value="0" />
+
+      <button id="btn-reset">Resetar ajustes</button>
+
+    </div>
+
+    <div id="painel-desenho" style="display:none">
+      <label>Ferramenta</label>
+      <div style="display:flex; gap:8px; margin-bottom:4px;">
+        <button id="btn-pincel" class="btn-tool ativo">✏️ Pincel</button>
+        <button id="btn-borracha" class="btn-tool">🧹 Borracha</button>
+      </div>
+
+      <label>Cor</label>
+      <input type="color" id="cor-pincel" value="#ff0000"
+        style="width:100%; height:36px; border:none; border-radius:8px; cursor:pointer; background:none;" />
+
+      <label>Espessura <span id="val-espessura">6</span>px</label>
+      <input type="range" id="espessura" min="1" max="60" value="6" />
+
+      <label>Opacidade <span id="val-opacidade">100</span>%</label>
+      <input type="range" id="opacidade" min="1" max="100" value="100" />
+
+      <button id="btn-limpar-desenho">🗑️ Limpar desenho</button>
+    </div>
+
+    <div id="painel-redimensionar" style="display:none">
+
+      <h3>📐 Redimensionar Tela</h3>
+      <div style="display: flex; gap: 8px;">
+        <div>
+          <label style="margin: 0 0 4px;">Largura (px)</label>
+          <input type="number" id="resize-w"
+            style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
         </div>
+        <div>
+          <label style="margin: 0 0 4px;">Altura (px)</label>
+          <input type="number" id="resize-h"
+            style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
+        </div>
+      </div>
+      <button id="btn-aplicar-resize" class="btn-tool" style="width:100%; margin-top:10px; padding:10px;">Aplicar Novo
+        Tamanho</button>
+
+      <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;" />
+
+      <h3>✂️ Recortar Área (Crop)</h3>
+
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button id="btn-modo-crop" class="btn-tool">🔍 Selecionar Área</button>
+        <button id="btn-confirmar-crop" class="btn-tool" style="background:#e74c3c; display:none;">✔️ Cortar</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <label style="margin: 0 0 4px;">Início X</label>
+          <input type="number" id="crop-x" value="0"
+            style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
+        </div>
+        <div>
+          <label style="margin: 0 0 4px;">Início Y</label>
+          <input type="number" id="crop-y" value="0"
+            style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
+        </div>
+        <div>
+          <label style="margin: 0 0 4px;">Largura</label>
+          <input type="number" id="crop-w"
+            style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
+        </div>
+        <div>
+          <label style="margin: 0 0 4px;">Altura</label>
+          <input type="number" id="crop-h"
+            style="width:100%; padding:6px; background:#444; color:#fff; border:1px solid #555; border-radius:4px;" />
+        </div>
+      </div>
+      <button id="btn-aplicar-crop" class="btn-tool"
+        style="width:100%; margin-top:10px; padding:10px; background: #555;">Cortar via Campos</button>
+      <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;" />
+
+      <h3>🔄 Girar e Espelhar</h3>
+      <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+        <button id="btn-gira-90" class="btn-tool">↩️ Girar 90°</button>
+        <button id="btn-flip-h" class="btn-tool">↔️ Espelhar H</button>
+        <button id="btn-flip-v" class="btn-tool">↕️ Espelhar V</button>
+      </div>
+
       
-      
-    </aside>
+
+  </aside>
+
+  <a href="../TelaInicio/index.html" id="btnVoltarInicio" class="btn-voltar">
+    ↩ Voltar Início
+  </a>
+
 
   </div>
 
 
 
-  <div id="modal-salvar" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center;">
-    <div style="background:#2a2a2a; padding:24px; border-radius:12px; width:320px; box-shadow:0 4px 20px rgba(0,0,0,0.5); text-align:center;">
+  <div id="modal-salvar"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center;">
+    <div
+      style="background:#2a2a2a; padding:24px; border-radius:12px; width:320px; box-shadow:0 4px 20px rgba(0,0,0,0.5); text-align:center;">
       <h3 style="margin-bottom:16px; font-size:18px;">Salvar Imagem</h3>
-      
-      <label style="display:block; text-align:left; font-size:12px; color:#bbb; margin-bottom:6px;">Nome do arquivo:</label>
-      <input type="text" id="input-nome-arquivo" value="foto-editada" style="width:100%; padding:10px; background:#444; color:#fff; border:1px solid #555; border-radius:6px; margin-bottom:14px; font-size:14px;" />
-      
-      <label style="display:block; text-align:left; font-size:12px; color:#bbb; margin-bottom:6px;">Formato da imagem:</label>
-      <select id="select-formato" style="width:100%; padding:10px; background:#444; color:#fff; border:1px solid #555; border-radius:6px; margin-bottom:20px; font-size:14px; cursor:pointer;">
-        <option value="image/png">PNG (Fundo Transparente)</option>
-        <option value="image/jpeg">JPEG (Arquivo Mais Leve)</option>
-        <option value="image/webp">WEBP (Alta Compactação)</option>
+
+      <label style="display:block; text-align:left; font-size:12px; color:#bbb; margin-bottom:6px;">Nome do
+        arquivo:</label>
+      <input type="text" id="input-nome-arquivo" value="foto-editada"
+        style="width:100%; padding:10px; background:#444; color:#fff; border:1px solid #555; border-radius:6px; margin-bottom:14px; font-size:14px;" />
+
+      <label style="display:block; text-align:left; font-size:12px; color:#bbb; margin-bottom:6px;">Formato da
+        imagem:</label>
+      <select id="select-formato"
+        style="width:100%; padding:10px; background:#444; color:#fff; border:1px solid #555; border-radius:6px; margin-bottom:20px; font-size:14px; cursor:pointer;">
+        <option value="image/png">PNG</option>
+        <option value="image/jpg">JPG</option>
+        <option value="image/webp">WEBP</option>
       </select>
-      
+
       <div style="display:flex; flex-direction:column; gap:10px;">
-        <button id="btn-confirmar-download" style="width:100%; padding:12px; background:#fff; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">💾 Baixar Arquivo</button>
-        <button id="btn-compartilhar" style="width:100%; padding:12px; background:#3498db; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">🔗 Compartilhar</button>
-        <button id="btn-fechar-modal" style="width:100%; padding:8px; background:transparent; color:#aaa; border:none; cursor:pointer; font-size:13px; margin-top:4px;">Cancelar</button>
+        <button id="btn-confirmar-download"
+          style="width:100%; padding:12px; background:#fff; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">💾
+          Baixar Arquivo</button>
+        <button id="btn-compartilhar"
+          style="width:100%; padding:12px; background:#3498db; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">🔗
+          Compartilhar</button>
+        <button id="btn-fechar-modal"
+          style="width:100%; padding:8px; background:transparent; color:#aaa; border:none; cursor:pointer; font-size:13px; margin-top:4px;">Cancelar</button>
       </div>
+    </div>
+  </div>
+
+  <div id="globalPageLoader" class="screen-loader-overlay">
+    <div class="loader-content" role="status" aria-live="polite" aria-label="Carregando PortArt">
+      <div class="stroke-bg"></div>
+      <div class="mark-loader">PortArt</div>
+      <div class="tagline-loader">"A beleza salvará o mundo."</div>
+
+      <svg class="brush-svg-bottom" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path class="animated-stroke" d="M10 80 Q 80 20, 160 70 T 320 40 T 390 60" stroke="#f4f1ea" stroke-width="4"
+          stroke-linecap="round" />
+      </svg>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
+
 </html>
