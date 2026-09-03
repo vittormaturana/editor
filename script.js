@@ -1,9 +1,9 @@
-const inputFile    = document.getElementById('input-file');
-const canvas       = document.getElementById('canvas');
-const uploadArea   = document.getElementById('upload-area');
-const btnDownload  = document.getElementById('btn-download');
-const btnReset     = document.getElementById('btn-reset');
-const ctx          = canvas.getContext('2d');
+const inputFile = document.getElementById('input-file');
+const canvas = document.getElementById('canvas');
+const uploadArea = document.getElementById('upload-area');
+const btnDownload = document.getElementById('btn-download');
+const btnReset = document.getElementById('btn-reset');
+const ctx = canvas.getContext('2d');
 
 // --- Variáveis de Estado Globais ---
 let img = new Image();
@@ -11,9 +11,9 @@ let desenhando = false;
 let ferramentaAtual = 'pincel';
 let historicoUndo = [];
 let historicoRedo = [];
-let modoCropVisual = false; 
-let cropInicioX = 0, cropInicioY = 0; 
-let cropFimX = 0, cropFimY = 0; 
+let modoCropVisual = false;
+let cropInicioX = 0, cropInicioY = 0;
+let cropFimX = 0, cropFimY = 0;
 
 // Função para salvar o estado atual do projeto
 function salvarEstado() {
@@ -24,13 +24,13 @@ function salvarEstado() {
     width: canvas.width,
     height: canvas.height
   };
-  
+
   historicoUndo.push(estado);
   historicoRedo = []; // Sempre que uma nova ação é feita, limpa o Redo
 }
 
 // Criação da camada de desenho (declarada no topo para evitar erros de escopo)
-const camada    = document.createElement('canvas');
+const camada = document.createElement('canvas');
 const ctxCamada = camada.getContext('2d');
 
 // --- Carrega a imagem escolhida via botão clássico com VALIDAÇÃO ---
@@ -39,7 +39,7 @@ inputFile.addEventListener('change', (e) => {
   if (!file) return;
 
   // Limite de tamanho: 10MB (10 * 1024 * 1024 bytes)
-  const limiteTamanho = 10 * 1024 * 1024; 
+  const limiteTamanho = 10 * 1024 * 1024;
 
   // Validação de Tipo
   if (!file.type.startsWith('image/')) {
@@ -105,7 +105,7 @@ uploadArea.addEventListener('drop', (e) => {
 
     if (!arquivo.type.startsWith('image/')) {
       alert('Por favor, solte apenas arquivos de imagem válidos!');
-      return; 
+      return;
     }
 
     if (arquivo.size > limiteTamanho) {
@@ -116,14 +116,14 @@ uploadArea.addEventListener('drop', (e) => {
     historicoUndo = [];
     historicoRedo = [];
     img.src = URL.createObjectURL(arquivo);
-    return; 
+    return;
   }
 
   // Tentativa B: É um link de imagem vindo de OUTRA ABA?
   const urlUriList = e.dataTransfer.getData('text/uri-list');
-  const urlPlain   = e.dataTransfer.getData('text/plain');
-  const htmlTexto  = e.dataTransfer.getData('text/html');
-  
+  const urlPlain = e.dataTransfer.getData('text/plain');
+  const htmlTexto = e.dataTransfer.getData('text/html');
+
   let urlFinal = urlUriList || urlPlain;
 
   if (htmlTexto && (!urlFinal || !urlFinal.startsWith('http'))) {
@@ -136,7 +136,7 @@ uploadArea.addEventListener('drop', (e) => {
   }
 
   if (urlFinal && (urlFinal.startsWith('http') || urlFinal.startsWith('data:image'))) {
-    img.crossOrigin = 'anonymous'; 
+    img.crossOrigin = 'anonymous';
     historicoUndo = [];
     historicoRedo = [];
     img.src = urlFinal;
@@ -151,11 +151,11 @@ img.onload = () => {
   const h = img.naturalHeight;
 
   // Ajusta o tamanho do canvas principal e da camada de desenho
-  canvas.width  = w;
+  canvas.width = w;
   canvas.height = h;
-  camada.width  = w;
+  camada.width = w;
   camada.height = h;
-  
+
   // Limpa desenhos anteriores se for um novo upload
   ctxCamada.clearRect(0, 0, w, h);
 
@@ -172,39 +172,39 @@ img.onload = () => {
   // Altera a exibição da tela
   uploadArea.style.display = 'none';
   canvas.style.display = 'block';
-  
+
   aplicarFiltros();
 };
 
 // --- Lê os sliders e monta a string de filtros ---
 function getFiltros() {
-  const b   = document.getElementById('brightness').value;
-  const c   = document.getElementById('contrast').value;
-  const s   = document.getElementById('saturate').value;
-  const sp  = document.getElementById('sepia').value;
-  const gr  = document.getElementById('grayscale').value;
+  const b = document.getElementById('brightness').value;
+  const c = document.getElementById('contrast').value;
+  const s = document.getElementById('saturate').value;
+  const sp = document.getElementById('sepia').value;
+  const gr = document.getElementById('grayscale').value;
 
   return `brightness(${b}%) contrast(${c}%) saturate(${s}%) sepia(${sp}%) grayscale(${gr}%)`;
 }
 
 // --- Desenha a imagem no canvas com os filtros aplicados ---
 function aplicarFiltros() {
-  const sh  = document.getElementById('sharpness').value; 
+  const sh = document.getElementById('sharpness').value;
 
   ctx.filter = getFiltros();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(img, 0, 0);
-  
-  ctx.filter = 'none'; 
+
+  ctx.filter = 'none';
 
   if (parseFloat(sh) > 0) {
     aplicarNitidez(parseFloat(sh));
   }
 }
-  
+
 function aplicarNitidez(intensidade) {
   const aux = document.createElement('canvas');
-  aux.width  = canvas.width;
+  aux.width = canvas.width;
   aux.height = canvas.height;
   const ctxAux = aux.getContext('2d');
 
@@ -212,13 +212,13 @@ function aplicarNitidez(intensidade) {
   ctxAux.drawImage(canvas, 0, 0);
 
   const original = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const borrada  = ctxAux.getImageData(0, 0, canvas.width, canvas.height);
-  const saida    = ctx.createImageData(canvas.width, canvas.height);
+  const borrada = ctxAux.getImageData(0, 0, canvas.width, canvas.height);
+  const saida = ctx.createImageData(canvas.width, canvas.height);
 
   const fator = 1.5;
 
   for (let i = 0; i < original.data.length; i += 4) {
-    saida.data[i]     = clamp(original.data[i]     + fator * (original.data[i]     - borrada.data[i]));
+    saida.data[i] = clamp(original.data[i] + fator * (original.data[i] - borrada.data[i]));
     saida.data[i + 1] = clamp(original.data[i + 1] + fator * (original.data[i + 1] - borrada.data[i + 1]));
     saida.data[i + 2] = clamp(original.data[i + 2] + fator * (original.data[i + 2] - borrada.data[i + 2]));
     saida.data[i + 3] = original.data[i + 3];
@@ -226,7 +226,7 @@ function aplicarNitidez(intensidade) {
 
   ctx.putImageData(saida, 0, 0);
 }
-  
+
 function clamp(val) {
   return Math.min(255, Math.max(0, Math.round(val)));
 }
@@ -239,12 +239,12 @@ document.querySelectorAll('input[type="range"]').forEach(slider => {
     if (elementoValor) {
       elementoValor.textContent = slider.value;
     }
-    
+
     // Se o slider alterado for de desenho (espessura ou opacidade), NÃO aplica filtros
     if (slider.id === 'espessura' || slider.id === 'opacidade') {
       return; // Apenas guarda o valor e sai, sem sumir com o desenho da tela!
     }
-    
+
     // Se for um slider de imagem (brilho, contraste, etc), aí sim renderiza as mudanças
     if (canvas.style.display !== 'none') {
       renderizar();
@@ -255,8 +255,8 @@ document.querySelectorAll('input[type="range"]').forEach(slider => {
 btnReset.addEventListener('click', () => {
   const defaults = {
     brightness: 100, contrast: 100,
-    saturate: 100,   blur: 0,
-    sepia: 0,        grayscale: 0
+    saturate: 100, blur: 0,
+    sepia: 0, grayscale: 0
   };
 
   Object.entries(defaults).forEach(([id, val]) => {
@@ -273,12 +273,12 @@ btnReset.addEventListener('click', () => {
 // ============================================================
 // SISTEMA DE DOWNLOAD E COMPARTILHAMENTO (MODAL ATUALIZADO)
 // ============================================================
-const modalSalvar       = document.getElementById('modal-salvar');
-const inputNomeArquivo  = document.getElementById('input-nome-arquivo');
-const selectFormato     = document.getElementById('select-formato'); // Captura o novo select
-const btnConfirmarDown  = document.getElementById('btn-confirmar-download');
-const btnCompartilhar   = document.getElementById('btn-compartilhar');
-const btnFecharModal    = document.getElementById('btn-fechar-modal');
+const modalSalvar = document.getElementById('modal-salvar');
+const inputNomeArquivo = document.getElementById('input-nome-arquivo');
+const selectFormato = document.getElementById('select-formato'); // Captura o novo select
+const btnConfirmarDown = document.getElementById('btn-confirmar-download');
+const btnCompartilhar = document.getElementById('btn-compartilhar');
+const btnFecharModal = document.getElementById('btn-fechar-modal');
 
 // 1. Ao clicar no botão principal do Header, apenas abre a mini tela
 btnDownload.addEventListener('click', () => {
@@ -320,7 +320,7 @@ btnCompartilhar.addEventListener('click', async () => {
     // Passa o formatoMime escolhido para a conversão em Blob
     canvas.toBlob(async (blob) => {
       const arquivo = new File([blob], `${nome}.${extensao}`, { type: formatoMime });
-      
+
       if (navigator.canShare && navigator.canShare({ files: [arquivo] })) {
         await navigator.share({
           files: [arquivo],
@@ -360,39 +360,39 @@ function renderizar() {
 }
 
 function getCoordenadas(e) {
-  const rect   = canvas.getBoundingClientRect();
-  const escX   = canvas.width  / rect.width;
-  const escY   = canvas.height / rect.height;
+  const rect = canvas.getBoundingClientRect();
+  const escX = canvas.width / rect.width;
+  const escY = canvas.height / rect.height;
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
   return { x: (clientX - rect.left) * escX, y: (clientY - rect.top) * escY };
 }
 
 function configurarPincel() {
-  const cor       = document.getElementById('cor-pincel').value;
+  const cor = document.getElementById('cor-pincel').value;
   const espessura = document.getElementById('espessura').value;
   const opacidade = document.getElementById('opacidade').value / 100;
 
-  ctxCamada.lineCap   = 'round';
-  ctxCamada.lineJoin  = 'round';
+  ctxCamada.lineCap = 'round';
+  ctxCamada.lineJoin = 'round';
   ctxCamada.lineWidth = espessura;
 
   if (ferramentaAtual === 'borracha') {
     ctxCamada.globalCompositeOperation = 'destination-out';
-    ctxCamada.globalAlpha  = 1;
-    ctxCamada.strokeStyle  = 'rgba(0,0,0,1)';
+    ctxCamada.globalAlpha = 1;
+    ctxCamada.strokeStyle = 'rgba(0,0,0,1)';
   } else {
     ctxCamada.globalCompositeOperation = 'source-over';
-    ctxCamada.globalAlpha  = opacidade;
-    ctxCamada.strokeStyle  = cor;
+    ctxCamada.globalAlpha = opacidade;
+    ctxCamada.strokeStyle = cor;
   }
 }
 
 canvas.addEventListener('pointerdown', (e) => {
-  
+
   if (canvas.style.display === 'none') return;
-    salvarEstado(); // <-- Adicione aqui, antes de começar a desenhar de fato
-  
+  salvarEstado(); // <-- Adicione aqui, antes de começar a desenhar de fato
+
   const { x, y } = getCoordenadas(e);
   desenhando = true;
   canvas.setPointerCapture(e.pointerId);
@@ -530,7 +530,7 @@ function desenharCaixaSelecao(x1, y1, x2, y2) {
 
 document.getElementById('btn-modo-crop').addEventListener('click', () => {
   modoCropVisual = !modoCropVisual;
-  
+
   if (modoCropVisual) {
     canvas.className = 'modo-crop';
     document.getElementById('btn-modo-crop').classList.add('ativo');
@@ -568,7 +568,7 @@ function executarCrop() {
   // Criamos uma nova referência e deixamos a função img.onload principal tratar o resto
   img = new Image();
   img.src = tempCanvasImg.toDataURL();
-  
+
   img.onload = () => {
     canvas.width = w;
     canvas.height = h;
@@ -615,7 +615,7 @@ function transformarImagem(tipo) {
 
   // Define as novas dimensões baseadas na operação
   const novaLargura = (tipo === 'gira90') ? canvas.height : canvas.width;
-  const novaAltura  = (tipo === 'gira90') ? canvas.width  : canvas.height;
+  const novaAltura = (tipo === 'gira90') ? canvas.width : canvas.height;
 
   // 1. Cria canvas temporário para a IMAGEM BASE
   const tempCanvasImg = document.createElement('canvas');
@@ -711,7 +711,7 @@ function aplicarEstado(estado, destinoHistorico) {
   imgDesenho.onload = () => {
     ctxCamada.clearRect(0, 0, camada.width, camada.height);
     ctxCamada.drawImage(imgDesenho, 0, 0);
-    
+
     // Carrega a imagem base de volta
     img = new Image();
     img.src = estado.imgSrc;
@@ -740,14 +740,30 @@ btnRedo.addEventListener('click', () => {
 // AVISO ANTES DE RECARREGAR A PÁGINA (ANTI-PERDA DE DADOS)
 // ============================================================
 window.addEventListener('beforeunload', (e) => {
-  // Só ativa o aviso se a imagem já tiver sido carregada (canvas visível)
   if (canvas && canvas.style.display !== 'none') {
-    // Cancela o evento padrão do navegador para forçar o pop-up de confirmação
     e.preventDefault();
-    
-    // Antigamente dava para personalizar o texto, hoje em dia os navegadores modernos 
-    // ignoram o texto customizado por segurança e mostram a mensagem padrão deles.
-    // Mas definir 'returnValue' ainda é obrigatório para o aviso disparar!
-    e.returnValue = ''; 
+    e.returnValue = '';
+  }
+}); // <-- Fecha corretamente o beforeunload aqui!
+
+// ============================================================
+// ANIMAÇÃO DE CARREGAMENTO ORIGINAL PORTART AO VOLTAR AO INÍCIO
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const btnVoltar = document.getElementById('btnVoltarInicio');
+  const globalLoader = document.getElementById('globalPageLoader');
+
+  if (btnVoltar && globalLoader) {
+    btnVoltar.addEventListener('click', (e) => {
+      e.preventDefault(); // Evita o redirecionamento instantâneo
+
+      // Ativa o loader adicionando a classe 'show' idêntica à do login
+      globalLoader.classList.add('show'); 
+
+      // Segura por 3 segundos para a animação do pincel e barra rodarem lindamente
+      setTimeout(() => {
+        window.location.href = "../TelaInicio/index.html";
+      }, 3000); 
+    });
   }
 });

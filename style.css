@@ -45,7 +45,7 @@ main {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #111;
+  background: #000000;
 }
 
 #upload-area {
@@ -77,9 +77,42 @@ aside {
   grid-area: aside;
   background: #2a2a2a;
   padding: 24px 16px;
-  overflow-y: auto;
   border-left: 1px solid #333;
+  
+  /* Novas propriedades para fixar o botão no rodapé */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* A rolagem agora será controlada internamente */
 }
+
+/* Nova classe para o conteúdo do painel (abas e sliders) */
+.painel-conteudo {
+  flex: 1;               /* Ocupa todo o espaço restante disponível */
+  overflow-y: auto;      /* Cria a barra de rolagem apenas aqui se necessário */
+  margin-bottom: 16px;   /* Margem para não colar no botão */
+}
+
+/* Nova estilização limpa para o botão no rodapé */
+#btnVoltarInicio {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  background: #444;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  width: 100%; /* Faz o botão ocupar toda a largura do painel lateral */
+}
+
+#btnVoltarInicio:hover {
+  background: #555; /* Efeito visual ao passar o mouse */
+}
+
+
 
 aside h3 {
   margin-bottom: 20px;
@@ -180,4 +213,84 @@ aside input[type="range"] {
   color: #fff;
   transform: scale(1.02);
   transition: all 0.2s ease;
+}
+
+/* ============================================================
+   TELA DE CARREGAMENTO ORIGINAL PORTART (ATUALIZADA COM FADE)
+   ============================================================ */
+:root {
+    --bg-loader: #0a0a0a;
+    --ink-loader: #f4f1ea;
+    --muted-loader: #8a8780;
+    --accent-loader: #d8d2c2;
+}
+
+.screen-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-loader);
+    z-index: 99999;
+    
+    /* Configuração para o Fade */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none; /* Impede cliques enquanto estiver invisível */
+    transition: opacity 0.5s ease-in-out; /* 0.5 segundos de Fade */
+}
+
+/* Quando ganha a classe show, ela surge suavemente */
+.screen-loader-overlay.show {
+    opacity: 1;
+    pointer-events: auto; /* Reativa os cliques/bloqueio de tela */
+}
+
+.loader-content {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+.mark-loader {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--ink-loader);
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.tagline-loader {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted-loader);
+    margin-bottom: 1rem; /* Margem sutil para afastar a curva */
+}
+
+/* NOVO ESTILO: SVG posicionado de forma relativa abaixo do texto */
+.brush-svg-bottom {
+    width: 240px; /* Ajuste o tamanho aqui se quiser maior ou menor */
+    height: auto;
+    display: block;
+}
+
+/* ANIMAÇÃO DE DESENHO DA CURVA */
+.animated-stroke {
+    stroke-dasharray: 340;
+    stroke-dashoffset: 340;
+    animation: draw 2s ease-in-out infinite alternate;
+}
+
+@keyframes draw {
+    0%   { stroke-dashoffset: 340; }
+    100% { stroke-dashoffset: 0; }
 }
